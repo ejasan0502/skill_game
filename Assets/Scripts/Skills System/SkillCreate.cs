@@ -116,7 +116,9 @@ public class SkillCreate : MonoBehaviour {
         IEnumerable<Inventory.InventoryItem> gems = Player.instance.inventory.items.Where<Inventory.InventoryItem>( (ii) => ii.item.itemType == ItemType.skillGem);
         skillGems = new List<SkillGem>();
         foreach (Inventory.InventoryItem ii in gems){
-            skillGems.Add(ii.item as SkillGem);
+            SkillGem skillGem = ii.item as SkillGem;
+            if ( skillGem == null ) Debug.Log("1");
+            skillGems.Add(skillGem);
         }
 
         // Create UI object of each skillGem in list
@@ -132,17 +134,17 @@ public class SkillCreate : MonoBehaviour {
             RectTransform rt = (RectTransform)o.transform;
             rt.anchoredPosition = new Vector2(0f,startY-i*height);
 
-            //// Icon
-            //Image icon = (Image) o.transform.GetChild(0).GetComponent<Image>();
-            //icon.sprite = skillGems[i].item.Icon;
+            // Icon
+            Image icon = (Image) o.transform.GetChild(0).GetComponent<Image>();
+            icon.sprite = skillGems[i].Icon;
 
-            //// Name
-            //Text nameText = (Text) o.transform.GetChild(1).GetComponent<Text>();
-            //nameText.text = skillGems[i].item.name;
+            // Name
+            Text nameText = (Text) o.transform.GetChild(1).GetComponent<Text>();
+            nameText.text = skillGems[i].name;
 
-            //// Amount
-            //Text amount = (Text) o.transform.GetChild(2).GetComponent<Text>();
-            //amount.text = skillGems[i].gemType.ToString();
+            // Amount
+            Text amount = (Text) o.transform.GetChild(2).GetComponent<Text>();
+            amount.text = skillGems[i].gemType.ToString();
 
             gemsUI.Add(o);
         }

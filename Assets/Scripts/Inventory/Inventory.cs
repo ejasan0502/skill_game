@@ -13,7 +13,7 @@ public class Inventory {
         public int amount;
 
         public InventoryItem(Item item, int amount){
-            this.item = new Item(item);
+            this.item = item;
             this.amount = amount;
         }
     }

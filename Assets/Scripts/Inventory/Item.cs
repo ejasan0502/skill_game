@@ -15,7 +15,7 @@ public class Item {
 
     public Sprite Icon {
         get {
-            return (Sprite)Resources.Load(iconPath) ?? (Sprite)Resources.Load("Icons/default");
+            return (Sprite)Resources.Load<Sprite>(iconPath) ?? (Sprite)Resources.Load<Sprite>("Icons/default");
         }
     }
     public bool stackable {
