@@ -20,8 +20,19 @@ public class Buff : Effect, IComparable {
     }
     public string info {
         get {
-            return attributes.ToString() + "," + charStats.ToString() + "," + combatStats.ToString();
+            string text = attributes.ToString();
+            if ( charStats != null ) text += "," + charStats.ToString();
+            if ( combatStats != null ) text += "," + combatStats.ToString();
+            return text;
         }
+    }
+
+    public Buff(bool percent, int duration, AttributeStats attributes, CharStats charStats, CombatStats combatStats){
+        this.percent = percent;
+        this.duration = duration;
+        this.attributes = attributes;
+        this.charStats = charStats;
+        this.combatStats = combatStats;
     }
 
     public void Apply(Character caster, Skill skill, Character target){

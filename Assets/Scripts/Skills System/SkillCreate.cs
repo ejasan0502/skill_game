@@ -74,6 +74,7 @@ public class SkillCreate : MonoBehaviour {
             // Crafting failed
             Debug.Log("Craft failed...");
             UpdateSkill();
+            GenerateList();
         }
     }
     // Give skill to character

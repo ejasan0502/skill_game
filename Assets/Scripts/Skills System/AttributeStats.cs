@@ -29,6 +29,13 @@ public class AttributeStats {
             field.SetValue(this, 0);
         }
     }
+    public AttributeStats(params int[] vals){
+        FieldInfo[] fields = GetType().GetFields();
+        for (int i = 0; i < fields.Length; i++){
+            if ( i >= vals.Length ) break;
+            fields[i].SetValue(this, vals[i]);
+        }
+    }
     public AttributeStats(AttributeStats stats){
         FieldInfo[] fields1 = this.GetType().GetFields();
         FieldInfo[] fields2 = stats.GetType().GetFields();
