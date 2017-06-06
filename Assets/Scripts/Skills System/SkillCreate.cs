@@ -16,9 +16,17 @@ public class SkillCreate : MonoBehaviour {
     public GameObject saveSkill;
     public GameObject inventoryItem;
 
-    private Skill toCraft = null;                               // Current skill settings by combining skillGems
-    private List<SkillGem> skillGems = new List<SkillGem>();    // Currently selected skill gems to combine
-    private List<GameObject> gemsUI = new List<GameObject>();
+    private Text skillInfoText;                 // Expected skill information from crafting
+
+    private Skill toCraft = null;                                                               // Current skill settings by combining skillGems
+    private List<SkillGem> skillGems = new List<SkillGem>();                                    // Currently selected skill gems to combine
+    private List<GameObject> gemsUI = new List<GameObject>();                                   // UI objects for gems
+    private List<Inventory.InventoryItem> gems = new List<Inventory.InventoryItem>();           // All skillGems in player's inventory
+
+    void Awake(){
+        Transform trans = selectSkillGems.transform.Find("Craft Skill Info");
+        if ( trans != null ) skillInfoText = trans.GetChild(0).GetComponent<Text>();
+    }
 
     // By default, this script is inactive on the UI canvas. To start crafting a skill, enable the gameObject this script is on
     void OnEnable(){
@@ -69,6 +77,20 @@ public class SkillCreate : MonoBehaviour {
             Player.instance.inventory.AddItem(new Rune(toCraft),1);
         }
     }
+    // Add skillGem to pool based on index from gems list
+    public void Select(int index){
+        SkillGem skillGem = gems[index].item as SkillGem;
+
+        if ( skillGems.Contains(skillGem) ){
+            skillGems.Remove(skillGem);
+            gemsUI[index].GetComponent<Image>().color = Color.white;
+        } else {
+            skillGems.Add(skillGem);
+            gemsUI[index].GetComponent<Image>().color = Color.yellow;
+        }
+
+        UpdateSkill();
+    }
 
     // Adds skill gem to list to combine
     public void AddSkillGem(SkillGem gem){
@@ -100,6 +122,30 @@ public class SkillCreate : MonoBehaviour {
         foreach (SkillGem gem in skillGems){
             gem.ApplyTo(toCraft);
         }
+
+        // Update Skill Info UI
+        string text = "";
+
+        // Element and Graphics
+        text += "Element: " + toCraft.elementType.ToString() + "\n";
+        text += "Cast Effect: " + (toCraft.castEffect != null ? toCraft.castEffect.name : "None") + "\n";
+        text += "Hit Effect: " + (toCraft.hitEffect != null ? toCraft.hitEffect.name : "None") + "\n";
+
+        // Target Count
+        text += "Target Count: " + toCraft.targetCount + "\n";
+
+        // Effects
+        text += "Effects: ";
+        if ( toCraft.effects.Count > 0 ){
+            text += "\n";
+            for (int i = 0; i < toCraft.effects.Count; i++){
+                text += (i+1) + ".) " + toCraft.effects[i].info + "\n";
+            }
+        } else {
+            text += "None";
+        }
+
+        skillInfoText.text = text;
     }
 
     // Generate UI list of skillGems available to craft with
@@ -111,21 +157,16 @@ public class SkillCreate : MonoBehaviour {
             }
             gemsUI = new List<GameObject>();
         }
-
-        // Fill skillGem list
-        IEnumerable<Inventory.InventoryItem> gems = Player.instance.inventory.items.Where<Inventory.InventoryItem>( (ii) => ii.item.itemType == ItemType.skillGem);
+        
         skillGems = new List<SkillGem>();
-        foreach (Inventory.InventoryItem ii in gems){
-            SkillGem skillGem = ii.item as SkillGem;
-            if ( skillGem == null ) Debug.Log("1");
-            skillGems.Add(skillGem);
-        }
+        gems = Player.instance.inventory.items.Where<Inventory.InventoryItem>( (ii) => ii.item.itemType == ItemType.skillGem).ToList();
+        
 
         // Create UI object of each skillGem in list
         float height = ((RectTransform)inventoryItem.transform).rect.height;
         contentTrans.sizeDelta = new Vector2(contentTrans.sizeDelta.x, height*skillGems.Count);
         float startY = contentTrans.rect.height/2.00f - height/2.00f;
-        for (int i = 0; i < skillGems.Count; i++){
+        for (int i = 0; i < gems.Count; i++){
             GameObject o = Instantiate(inventoryItem);
             o.transform.SetParent(contentTrans);
             o.transform.localScale = Vector3.one;
@@ -136,15 +177,20 @@ public class SkillCreate : MonoBehaviour {
 
             // Icon
             Image icon = (Image) o.transform.GetChild(0).GetComponent<Image>();
-            icon.sprite = skillGems[i].Icon;
+            icon.sprite = gems[i].item.Icon;
 
             // Name
             Text nameText = (Text) o.transform.GetChild(1).GetComponent<Text>();
-            nameText.text = skillGems[i].name;
+            nameText.text = gems[i].item.name;
 
             // Amount
             Text amount = (Text) o.transform.GetChild(2).GetComponent<Text>();
-            amount.text = skillGems[i].gemType.ToString();
+            amount.text = ((SkillGem)gems[i].item).gemType.ToString();
+
+            // Add listener when selecting this skillGem
+            Button button = o.GetComponent<Button>();
+            int index = i;
+            button.onClick.AddListener(() => Select(index));
 
             gemsUI.Add(o);
         }

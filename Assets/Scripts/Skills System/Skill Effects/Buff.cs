@@ -18,6 +18,11 @@ public class Buff : Effect, IComparable {
             return EffectType.buff;
         }
     }
+    public string info {
+        get {
+            return attributes.ToString() + "," + charStats.ToString() + "," + combatStats.ToString();
+        }
+    }
 
     public void Apply(Character caster, Skill skill, Character target){
         if ( !target.HasBuff(this) ){

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,13 +10,29 @@ public class ElementGem : SkillGem {
     public string castEffectPath;
     public string hitEffectPath;
 
-    public ElementGem(string name, string description, string id, Tier tier, ItemType itemType,
+    public ElementGem(string name, string description, string iconPath, Tier tier, ItemType itemType,
                       SkillGemType gemType,
-                      ElementType elementType, string castEffectPath, string hitEffectPath) :
-                      base (name, description, id, tier, itemType, gemType){
-        this.element = elementType;
+                      string castEffectPath, string hitEffectPath) :
+                      base (name, description, iconPath, tier, itemType, gemType){
         this.castEffectPath = castEffectPath;
         this.hitEffectPath = hitEffectPath;
+
+        if ( (int)gemType != 0 ){
+            Debug.LogError(name + " has an invalid gemType for ElementGem!");
+            return;
+        }
+
+        switch (gemType.ToString()){
+            case "aquamarine": element = ElementType.ice; break;
+            case "sapphire": element = ElementType.water; break;
+            case "amethyst": element = ElementType.wind; break;
+            case "citrine": element = ElementType.earth; break;
+            case "topaz": element = ElementType.electric; break;
+            case "moonstone": element = ElementType.magical; break;
+            case "pearl": element = ElementType.physical; break;
+            case "emerald": element = ElementType.toxic; break;
+            case "ruby": element = ElementType.fire; break;
+        }
     }
 
     public override void ApplyTo(Skill skill){

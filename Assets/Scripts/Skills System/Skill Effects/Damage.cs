@@ -14,6 +14,11 @@ public class Damage : Effect {
             return EffectType.damage;
         }
     }
+    public string info {
+        get {
+            return string.Format("{0}" + (percent ? "% " : " ") + "to {1}" + (percent ? "% " : " ") + "damage. {2} hit(s)", minDmg, maxDmg, hitCount);
+        }
+    }
 
     public Damage(float minDmg, float maxDmg, int hitCount, bool percent){
         this.minDmg = minDmg;

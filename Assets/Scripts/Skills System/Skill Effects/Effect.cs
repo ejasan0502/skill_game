@@ -8,6 +8,9 @@ public interface Effect {
     // Determines what kind of effect it is
     EffectType effectType { get; }
 
+    // Description
+    string info { get; }
+
     // Apply to target/targets
     // Called when skill cast is successful
     void Apply(Character caster, Skill skill, Character target);

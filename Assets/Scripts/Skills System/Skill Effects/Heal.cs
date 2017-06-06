@@ -12,11 +12,14 @@ public class Heal : Effect {
             return EffectType.heal;
         }
     }
+    public string info {
+        get {
+            return "Heals " + (percent ? amount + "%" : amount+"");
+        }
+    }
 
     public void Apply(Character caster, Skill skill, Character target){
-        float playerDmg = skill.elementType == ElementType.physical ? caster.combatStats.PhysicalDamage : caster.combatStats.MagicalDamage;
-
-        target.Heal(percent ? playerDmg*amount : playerDmg+amount);
+        target.Heal(percent ? target.maxCharStats.health*amount : amount);
     }
 
 }

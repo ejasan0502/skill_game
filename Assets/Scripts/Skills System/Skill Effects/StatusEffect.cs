@@ -8,11 +8,17 @@ public class StatusEffect : Effect {
 
     public Status status;
     public int duration;
+    public float chance;
 
     public bool percent;
     public EffectType effectType {
         get {
             return EffectType.status;
+        }
+    }
+    public string info {
+        get {
+            return chance + "% chance to " + status.ToString();
         }
     }
 

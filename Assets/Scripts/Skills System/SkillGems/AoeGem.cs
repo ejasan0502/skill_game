@@ -8,10 +8,10 @@ public class AoeGem : SkillGem {
 
     public int targetCount;
 
-    public AoeGem(string name, string description, string id, Tier tier, ItemType itemType, 
+    public AoeGem(string name, string description, string iconPath, Tier tier, ItemType itemType, 
                   SkillGemType gemType,
                   int targetCount) :
-                  base (name, description, id, tier, itemType, gemType){
+                  base (name, description, iconPath, tier, itemType, gemType){
         this.targetCount = targetCount;
     }
 

@@ -74,4 +74,15 @@ public class CombatStats {
         return stats;
     }
 
+    public override string ToString(){
+        string text = "";
+        
+        // Assume when a value is under 1, its a percentage
+        foreach (FieldInfo field in GetType().GetFields()){
+            float val = (float)field.GetValue(this);
+            text += field.Name + " +" + val + (val < 1 && val > 0 ? "%" : "") + ", ";
+        }
+
+        return text;
+    }
 }

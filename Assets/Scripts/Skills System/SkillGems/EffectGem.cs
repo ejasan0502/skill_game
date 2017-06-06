@@ -7,10 +7,10 @@ public class EffectGem : SkillGem {
 
     public Effect effect;
 
-    public EffectGem(string name, string description, string id, Tier tier, ItemType itemType, 
+    public EffectGem(string name, string description, string iconPath, Tier tier, ItemType itemType, 
                      SkillGemType gemType,
                      Effect effect) :
-                      base (name, description, id, tier, itemType, gemType){
+                      base (name, description, iconPath, tier, itemType, gemType){
         this.effect = effect;
     }
 
