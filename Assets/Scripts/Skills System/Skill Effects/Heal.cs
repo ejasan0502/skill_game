@@ -7,6 +7,7 @@ public class Heal : Effect {
 
     public float amount;
     public bool percent;
+
     public EffectType effectType {
         get {
             return EffectType.heal;
@@ -16,6 +17,11 @@ public class Heal : Effect {
         get {
             return "Heals " + (percent ? amount + "%" : amount+"");
         }
+    }
+
+    public Heal(float amount, bool percent){
+        this.amount = amount;
+        this.percent = percent;
     }
 
     public void Apply(Character caster, Skill skill, Character target){

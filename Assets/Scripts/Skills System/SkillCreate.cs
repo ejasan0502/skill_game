@@ -17,15 +17,22 @@ public class SkillCreate : MonoBehaviour {
     public GameObject inventoryItem;
 
     private Text skillInfoText;                 // Expected skill information from crafting
+    private Text chanceText;                    // Text of chance to craft
 
+    private float chanceToCraft = 100f;                                                         // Current chance to successfully craft the skill
     private Skill toCraft = null;                                                               // Current skill settings by combining skillGems
     private List<SkillGem> skillGems = new List<SkillGem>();                                    // Currently selected skill gems to combine
     private List<GameObject> gemsUI = new List<GameObject>();                                   // UI objects for gems
     private List<Inventory.InventoryItem> gems = new List<Inventory.InventoryItem>();           // All skillGems in player's inventory
 
     void Awake(){
+        // Look for skillInfoText
         Transform trans = selectSkillGems.transform.Find("Craft Skill Info");
         if ( trans != null ) skillInfoText = trans.GetChild(0).GetComponent<Text>();
+
+        // Look for chanceText
+        trans = selectSkillGems.transform.Find("Chance of Success");
+        if ( trans != null ) chanceText = trans.GetComponent<Text>();
     }
 
     // By default, this script is inactive on the UI canvas. To start crafting a skill, enable the gameObject this script is on
@@ -42,17 +49,14 @@ public class SkillCreate : MonoBehaviour {
     public void Craft(){
         // Chance to craft skill depending on amount of skill gems and tiers of each skill gem
         // Remove skill gems from inventory
-        float chanceToSucceed = 0f;
         foreach (SkillGem gem in skillGems){
-            chanceToSucceed += (float)gem.tier/skillGems.Count;
-
             Player.instance.inventory.RemoveItem(gem, 1);
         }
 
         // Clear skillGems for next craft
         skillGems = new List<SkillGem>();
 
-        if ( UnityEngine.Random.Range(0,100) < chanceToSucceed ){
+        if ( UnityEngine.Random.Range(0,100) < chanceToCraft ){
             // Crafting successful
         }
     }
@@ -129,11 +133,19 @@ public class SkillCreate : MonoBehaviour {
     // Update the skill to craft
     // For UI purposes
     private void UpdateSkill(){
+        // Clear last settings of the crafting skill
         toCraft = new Skill();
 
+        // Apply skillGems to skill
+        chanceToCraft = 0f;
         foreach (SkillGem gem in skillGems){
             gem.ApplyTo(toCraft);
+
+            chanceToCraft += (int)gem.tier/skillGems.Count;
         }
+
+        // Update success chance to craft
+        chanceText.text = chanceToCraft + "% chance of success";
 
         // Update Skill Info UI
         string text = "";
