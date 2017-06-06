@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 // Stats that increases a character's combatStats and charStats;
+[System.Serializable]
 public class AttributeStats {
 
     public int strength;        // Increases physical damage and physical defense

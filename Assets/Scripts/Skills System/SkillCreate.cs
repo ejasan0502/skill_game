@@ -15,15 +15,19 @@ public class SkillCreate : MonoBehaviour {
     public GameObject selectSkillGems;
     public GameObject saveSkill;
     public GameObject inventoryItem;
+    public GameObject characterIcon;
 
     private Text skillInfoText;                 // Expected skill information from crafting
     private Text chanceText;                    // Text of chance to craft
+    private RectTransform charactersRect;       // Rect Transform of where to place character icons for selection
 
+    private Character character;                                                                // Character to save skill to
     private float chanceToCraft = 100f;                                                         // Current chance to successfully craft the skill
     private Skill toCraft = null;                                                               // Current skill settings by combining skillGems
     private List<SkillGem> skillGems = new List<SkillGem>();                                    // Currently selected skill gems to combine
     private List<GameObject> gemsUI = new List<GameObject>();                                   // UI objects for gems
     private List<Inventory.InventoryItem> gems = new List<Inventory.InventoryItem>();           // All skillGems in player's inventory
+    private List<GameObject> charactersUI = new List<GameObject>();                             // All player characters
 
     void Awake(){
         // Look for skillInfoText
@@ -33,6 +37,10 @@ public class SkillCreate : MonoBehaviour {
         // Look for chanceText
         trans = selectSkillGems.transform.Find("Chance of Success");
         if ( trans != null ) chanceText = trans.GetComponent<Text>();
+
+        // Look for charactersRect
+        trans = saveSkill.transform.Find("Characters");
+        if ( trans != null ) charactersRect = trans as RectTransform;
     }
 
     // By default, this script is inactive on the UI canvas. To start crafting a skill, enable the gameObject this script is on
@@ -41,6 +49,7 @@ public class SkillCreate : MonoBehaviour {
         saveSkill.SetActive(false);
 
         GenerateList();
+        GenerateCharacterList();
     }
 
     // UI Methods
@@ -58,24 +67,34 @@ public class SkillCreate : MonoBehaviour {
 
         if ( UnityEngine.Random.Range(0,100) < chanceToCraft ){
             // Crafting successful
+            Debug.Log("Craft successful!");
+            selectSkillGems.SetActive(false);
+            saveSkill.SetActive(true);
+        } else {
+            // Crafting failed
+            Debug.Log("Craft failed...");
+            UpdateSkill();
         }
     }
     // Give skill to character
-    public void SaveSkill(Character character){
+    public void SaveSkillToCharacter(){
         // Make sure we have a skill to save
-        if ( toCraft != null ){
+        if ( toCraft != null && character != null ){
             // Check if there is a duplicate skill
             Skill duplicate = character.skills.Where<Skill>( (s) => s.name == toCraft.name).FirstOrDefault();
             if ( duplicate == null ){
+                Debug.Log("Skill saved to " + character.name);
                 character.skills.Add(new Skill(toCraft));
                 toCraft = null;
+                character = null;
+                gameObject.SetActive(false);
             } else {
                 // There cannot be skills with the same name, Replace or change name of skill
             }
         }
     }
     // Save skill as a rune to player's inventory
-    public void SaveSkill(){
+    public void SaveSkillToRune(){
         // Make sure we have a skill to save
         if ( toCraft != null ){
             Player.instance.inventory.AddItem(new Rune(toCraft),1);
@@ -128,6 +147,20 @@ public class SkillCreate : MonoBehaviour {
         }
 
         UpdateSkill();
+    }
+    // Select character to give skill to
+    public void SelectCharacter(int index){
+        if ( index < Player.instance.characters.Count ){
+            character = Player.instance.characters[index];
+
+            for (int i = 0; i < Player.instance.characters.Count; i++){
+                if ( character == Player.instance.characters[i] ){
+                    charactersUI[i].GetComponent<Image>().color = Color.yellow;
+                } else {
+                    charactersUI[i].GetComponent<Image>().color = Color.white;
+                }
+            }
+        }
     }
 
     // Update the skill to craft
@@ -217,6 +250,34 @@ public class SkillCreate : MonoBehaviour {
             button.onClick.AddListener(() => Select(index));
 
             gemsUI.Add(o);
+        }
+    }
+    // Generate UI list of player characters
+    private void GenerateCharacterList(){
+        // Clear current characters in UI
+        if ( charactersUI.Count > 0 ){
+            for (int i = charactersUI.Count-1; i >= 0; i--){
+                Destroy(charactersUI[i]);
+            }
+            charactersUI = new List<GameObject>();
+        }
+
+        List<Character> characters = Player.instance.characters;
+        float startY = charactersRect.rect.height/2.00f;
+        float height = ((RectTransform)characterIcon.transform).rect.height;
+        for (int i = 0; i < characters.Count; i++){
+            int index = i;
+
+            GameObject o = Instantiate(characterIcon);
+            o.transform.SetParent(charactersRect);
+            o.transform.localScale = Vector3.one;
+
+            ((RectTransform)o.transform).anchoredPosition = new Vector2(0f,startY-i*height);
+
+            o.GetComponent<Image>().sprite = characters[i].icon;
+            o.GetComponent<Button>().onClick.AddListener(() => SelectCharacter(index));
+
+            charactersUI.Add(o);
         }
     }
 }

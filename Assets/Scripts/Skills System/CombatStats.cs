@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 // Properties of character or skill that relates to damage
+[System.Serializable]
 public class CombatStats {
     
     public float minPhysDmg, maxPhysDmg;    // Physical Damage

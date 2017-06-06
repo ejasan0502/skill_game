@@ -3,7 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 
 // Object that can be killed or perform actions
+[System.Serializable]
 public class Character {
+
+    // Graphics
+    public string name;
+    public string iconPath;
+    public Sprite icon {
+        get {
+            return (Sprite)Resources.Load<Sprite>(iconPath) ?? (Sprite)Resources.Load<Sprite>("Icons/default");
+        }
+    }
 
     // Stat variables
     public AttributeStats attributes, maxAttributes;    // Base attributes, Attributes modified by equipment and skills
@@ -35,6 +45,12 @@ public class Character {
             }
         }
         return false;
+    }
+
+    public Character(){
+        buffs = new Dictionary<Buff,int>();
+        statusEffects = new Dictionary<StatusEffect,int>();
+        skills = new List<Skill>();
     }
 
     // Inflict health and check for death

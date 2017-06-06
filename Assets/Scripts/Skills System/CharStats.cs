@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 // Properties of character
+[System.Serializable]
 public class CharStats {
     
     public float health;
