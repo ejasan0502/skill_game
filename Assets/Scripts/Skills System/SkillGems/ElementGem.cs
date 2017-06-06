@@ -17,7 +17,7 @@ public class ElementGem : SkillGem {
         this.castEffectPath = castEffectPath;
         this.hitEffectPath = hitEffectPath;
 
-        if ( (int)gemType != 0 ){
+        if ( (int)gemType > 9 ){
             Debug.LogError(name + " has an invalid gemType for ElementGem!");
             return;
         }

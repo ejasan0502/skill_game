@@ -81,37 +81,49 @@ public class SkillCreate : MonoBehaviour {
     public void Select(int index){
         SkillGem skillGem = gems[index].item as SkillGem;
 
+        // Select/Deselect skillGem
         if ( skillGems.Contains(skillGem) ){
             skillGems.Remove(skillGem);
             gemsUI[index].GetComponent<Image>().color = Color.white;
         } else {
+            int skillGemVal = (int)skillGem.gemType;
+
+            // Check if skillGem has any conflicting gems, if so remove them
+            for (int i = skillGems.Count-1; i >= 0; i--){
+                int gemVal = (int)skillGems[i].gemType;
+
+                if ( skillGemVal < 10 ){
+                    // skillGem is an element type skillGem
+                    // Check if this gem is also an element type
+                    if ( gemVal < 10 ){
+                        // Remove gem
+                        skillGems.RemoveAt(i);
+                    }
+                } else if ( skillGemVal == 10 || skillGemVal == 11 ){
+                    // skillGem is a damage or heal effect
+                    // Check if this gem is also a damage or heal effect
+                    if ( gemVal == 10 || gemVal == 11 ){
+                        // Remove gem
+                        skillGems.RemoveAt(i);
+                    }
+                } else if ( skillGemVal == gemVal ){
+                    // Remove skill gem since its of the same type
+                    skillGems.RemoveAt(i);
+                }
+            }
+
             skillGems.Add(skillGem);
-            gemsUI[index].GetComponent<Image>().color = Color.yellow;
+
+            for (int i = 0; i < gems.Count; i++){
+                if ( skillGems.Contains(gems[i].item as SkillGem) ){
+                    gemsUI[i].GetComponent<Image>().color = Color.yellow;   
+                } else {
+                    gemsUI[i].GetComponent<Image>().color = Color.white;   
+                }
+            }
         }
 
         UpdateSkill();
-    }
-
-    // Adds skill gem to list to combine
-    public void AddSkillGem(SkillGem gem){
-        // Check if a similar skillGem exists in the list
-        SkillGem skillGem = skillGems.Where<SkillGem>( (sg) => (int)sg.gemType == (int)gem.gemType).FirstOrDefault();
-        if ( skillGem == null ){
-            skillGems.Add(gem);
-        } else {
-            // Replace gem
-            skillGems.Remove(skillGem);
-            skillGems.Add(gem);
-        }
-
-        UpdateSkill();
-    }
-    // Remove a skill gem from list
-    public void RemoteSkillGem(int index){
-        if ( index < skillGems.Count ){
-            skillGems.RemoveAt(index);
-            UpdateSkill();
-        }
     }
 
     // Update the skill to craft
