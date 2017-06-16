@@ -11,6 +11,8 @@ using UnityEngine.UI;
 public class SkillCreate : MonoBehaviour {
 
     [Header("Object References")]
+    public InputField nameField;
+    public InputField descriptionField;
     public RectTransform contentTrans;
     public GameObject selectSkillGems;
     public GameObject saveSkill;
@@ -56,6 +58,12 @@ public class SkillCreate : MonoBehaviour {
     // Methods called from UI events
     // Display crafting animation
     public void Craft(){
+        // Make sure theres a name and description available
+        if ( nameField.text == "" || descriptionField.text == "" ){
+            Debug.Log("You need to input a name or description!");
+            return;
+        }
+
         // Chance to craft skill depending on amount of skill gems and tiers of each skill gem
         // Remove skill gems from inventory
         foreach (SkillGem gem in skillGems){

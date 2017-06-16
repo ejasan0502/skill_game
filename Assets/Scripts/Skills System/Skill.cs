@@ -29,6 +29,12 @@ public class Skill {
 
     public CharStats cost;
 
+    public bool IsAoe {
+        get {
+            return targetCount > 1;
+        }
+    }
+
     public Skill(){
         name = "";
         description = "";
