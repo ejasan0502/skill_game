@@ -28,6 +28,7 @@ public class BattleManager : MonoBehaviour {
     private List<CharacterObj> playerChars;     // List of all player objects in battle
 
     private GameObject playerActionSelect;      // BattleMenu for Action select
+    private GameObject listScroll;              // Scrollview for list
     private int selectedCharacter = 0;          // Currently selected character for the player to select an action for
     private List<CharacterAction> actions;      // List of all actions that will be performed in a battle round
     private List<GameObject> listObjs;          // List of skills or items from list objects
@@ -45,6 +46,9 @@ public class BattleManager : MonoBehaviour {
 
         // Initialize managers
         aiManager = new AIManager();
+
+        playerActionSelect = battleMenu.transform.Find("ActionMenu").gameObject;
+        listScroll = list.parent.parent.gameObject;
     }
     void Start(){
         GenerateCharacters();
@@ -57,6 +61,7 @@ public class BattleManager : MonoBehaviour {
         playerChars = new List<CharacterObj>();
         for (int i = 0; i < Player.instance.characters.Count; i++){
             GameObject o = (GameObject) Instantiate(Resources.Load("Characters/"+Player.instance.characters[i].name));
+            o.name = i+"";
 
             CharacterObj co = o.GetComponent<CharacterObj>();
             co.character = Player.instance.characters[i];
@@ -78,6 +83,7 @@ public class BattleManager : MonoBehaviour {
         for (int i = 0; i < monsterCount; i++){
             Monster o = Instantiate(monsterPool[Random.Range(0,monsterPool.Length)]);
             o.transform.SetParent(monsterSpawn);
+            o.name = (i+playerChars.Count)+"";
 
             width += ((RectTransform)o.transform).rect.width;
 
@@ -104,6 +110,7 @@ public class BattleManager : MonoBehaviour {
             }
         }
         listObjs = new List<GameObject>();
+        listScroll.SetActive(true);
 
         // Create list of skills
         float height = ((RectTransform)list.parent).rect.height;
@@ -143,6 +150,7 @@ public class BattleManager : MonoBehaviour {
             }
         }
         listObjs = new List<GameObject>();
+        listScroll.SetActive(true);
 
         // Create list of skills
         List<Inventory.InventoryItem> inventoryItems = Player.instance.inventory.items.Where((i) => i.item.itemType == ItemType.consumable).ToList();
@@ -185,7 +193,7 @@ public class BattleManager : MonoBehaviour {
         battleLog.SetActive(false);
         battleMenu.SetActive(true);
         playerActionSelect.SetActive(true);
-        list.gameObject.SetActive(false);
+        listScroll.SetActive(false);
 
         // Reset selectedCharacter
         selectedCharacter = 0;
@@ -209,11 +217,13 @@ public class BattleManager : MonoBehaviour {
     // All actions a player character can make.
     // Perform a basic attack to a target.
     public void Attack(){
+        Debug.Log(playerChars[selectedCharacter].name + " will attack.");
         actions.Add( new CharacterAction(playerChars[selectedCharacter], ActionType.attack) );
         battlePhase = BattlePhase.targetSelect;
     }
     // Cast a spell on a target or targets.
     public void Cast(){
+        Debug.Log(playerChars[selectedCharacter].name + " will cast.");
         actions.Add( new CharacterAction(playerChars[selectedCharacter], ActionType.cast) );
         battlePhase = BattlePhase.skillSelect;
 
@@ -222,6 +232,7 @@ public class BattleManager : MonoBehaviour {
     }
     // Use an item on a target or targets
     public void Use(){
+        Debug.Log(playerChars[selectedCharacter].name + " will use.");
         actions.Add( new CharacterAction(playerChars[selectedCharacter], ActionType.use) );
         battlePhase = BattlePhase.itemSelect;
 
@@ -278,9 +289,12 @@ public class BattleManager : MonoBehaviour {
     public void SetSkill(int index){
         CurrentAction.skill = CurrentAction.character.skills[index];
         battlePhase = BattlePhase.targetSelect;
+        listScroll.SetActive(false);
     }
     // Set item for selected character based on index
     public void SetItem(int index){
-
+        CurrentAction.usable = items[index];
+        battlePhase = BattlePhase.targetSelect;
+        listScroll.SetActive(false);
     }
 }

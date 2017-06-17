@@ -11,8 +11,7 @@ public class CharacterObj : MonoBehaviour {
     void Awake(){
         battleManager = GameObject.FindObjectOfType<BattleManager>();
     }
-
-    public void Select(){
+    void OnMouseDown(){
         battleManager.SetTarget(int.Parse(name));
     }
 
