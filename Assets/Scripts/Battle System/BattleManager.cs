@@ -217,13 +217,23 @@ public class BattleManager : MonoBehaviour {
     // All actions a player character can make.
     // Perform a basic attack to a target.
     public void Attack(){
+        CharacterAction duplicate = actions.Where<CharacterAction>((ca) => ca.characterObj == playerChars[selectedCharacter]).FirstOrDefault();
+        if ( duplicate != null ){
+            actions.Remove(duplicate);
+        }
+
         Debug.Log(playerChars[selectedCharacter].name + " will attack.");
         actions.Add( new CharacterAction(playerChars[selectedCharacter], ActionType.attack) );
         battlePhase = BattlePhase.targetSelect;
     }
     // Cast a spell on a target or targets.
     public void Cast(){
-        Debug.Log(playerChars[selectedCharacter].name + " will cast.");
+        CharacterAction duplicate = actions.Where<CharacterAction>((ca) => ca.characterObj == playerChars[selectedCharacter]).FirstOrDefault();
+        if ( duplicate != null ){
+            actions.Remove(duplicate);
+        }
+
+        Debug.Log(playerChars[selectedCharacter].name + " will cast a spell.");
         actions.Add( new CharacterAction(playerChars[selectedCharacter], ActionType.cast) );
         battlePhase = BattlePhase.skillSelect;
 
@@ -232,7 +242,12 @@ public class BattleManager : MonoBehaviour {
     }
     // Use an item on a target or targets
     public void Use(){
-        Debug.Log(playerChars[selectedCharacter].name + " will use.");
+        CharacterAction duplicate = actions.Where<CharacterAction>((ca) => ca.characterObj == playerChars[selectedCharacter]).FirstOrDefault();
+        if ( duplicate != null ){
+            actions.Remove(duplicate);
+        }
+
+        Debug.Log(playerChars[selectedCharacter].name + " will use an item.");
         actions.Add( new CharacterAction(playerChars[selectedCharacter], ActionType.use) );
         battlePhase = BattlePhase.itemSelect;
 
@@ -253,18 +268,22 @@ public class BattleManager : MonoBehaviour {
 
             if ( CurrentAction.targets.Contains(monsters[index]) ){
                 // Remove target
+                Debug.Log("Removed monster " + index + " from targets");
                 CurrentAction.targets.Remove(monsters[index]);
             } else {
                 // Add target
+                Debug.Log("Added monster " + index + " to targets");
                 CurrentAction.targets.Add(monsters[index]);
             }
         } else {
             // Player is targetting a player character
             if ( CurrentAction.targets.Contains(playerChars[index]) ){
                 // Remove target
+                Debug.Log("Removed player " + index + " from targets");
                 CurrentAction.targets.Remove(playerChars[index]);
             } else {
                 // Add target
+                Debug.Log("Added player " + index + " to targets");
                 CurrentAction.targets.Add(playerChars[index]);
             }
         }
@@ -288,12 +307,14 @@ public class BattleManager : MonoBehaviour {
     // Set skill for selected character based on index
     public void SetSkill(int index){
         CurrentAction.skill = CurrentAction.character.skills[index];
+        Debug.Log("Casting " + CurrentAction.skill.name);
         battlePhase = BattlePhase.targetSelect;
         listScroll.SetActive(false);
     }
     // Set item for selected character based on index
     public void SetItem(int index){
         CurrentAction.usable = items[index];
+        Debug.Log("Using " + CurrentAction.usable.name);
         battlePhase = BattlePhase.targetSelect;
         listScroll.SetActive(false);
     }
