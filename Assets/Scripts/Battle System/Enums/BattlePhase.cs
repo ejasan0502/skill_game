@@ -6,6 +6,8 @@ public enum BattlePhase {
 
     actionSelect,
     targetSelect,
+    skillSelect,
+    itemSelect,
     enemyTurn,
     battle,
     end

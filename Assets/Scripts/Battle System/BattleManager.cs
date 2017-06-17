@@ -1,6 +1,8 @@
-﻿using System.Collections;
+﻿using System.Linq;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 // Handles turn by turn combat between players and/or ai
 // This system uses the speed of each character to determine which character takes priority.
@@ -13,7 +15,8 @@ public class BattleManager : MonoBehaviour {
     public BattlePhase battlePhase;             // Current phase of battle
 
     [Header("Object References")]
-    public GameObject targetable;               // Object references for a targetable object
+    public RectTransform list;                  // Scrollview for list
+    public GameObject listItem;                 // Object reference to an item in list
     public GameObject battleLog;                // Logs every action performed by a character
     public GameObject battleMenu;               // Battle UI elements in overlay canvas
     public RectTransform monsterSpawn;          // Position in camera of where monsters will appear
@@ -25,9 +28,10 @@ public class BattleManager : MonoBehaviour {
     private List<CharacterObj> playerChars;     // List of all player objects in battle
 
     private GameObject playerActionSelect;      // BattleMenu for Action select
-    private GameObject list;                    // List in BattleMenu for skills/consumables
     private int selectedCharacter = 0;          // Currently selected character for the player to select an action for
     private List<CharacterAction> actions;      // List of all actions that will be performed in a battle round
+    private List<GameObject> listObjs;          // List of skills or items from list objects
+    private List<Consumable> items;             // List of all consumables in player's inventory
 
     private CharacterAction CurrentAction {
         get {
@@ -91,13 +95,97 @@ public class BattleManager : MonoBehaviour {
             monsters[i].transform.localPosition = new Vector3(x,0,0);
         }
     }
+    // Generate list of skills
+    private void ShowSkills(){
+        // Clear listObjs
+        if ( listObjs != null && listObjs.Count > 0 ){
+            for (int i = listObjs.Count-1; i >= 0; i--){
+                Destroy(listObjs[i]);
+            }
+        }
+        listObjs = new List<GameObject>();
+
+        // Create list of skills
+        float height = ((RectTransform)list.parent).rect.height;
+        list.sizeDelta = new Vector2(list.sizeDelta.x, height*CurrentAction.character.skills.Count);
+        float startY = list.rect.height/2.00f - height/2.00f;
+        for (int i = 0; i < CurrentAction.character.skills.Count; i++){
+            GameObject o = Instantiate(listItem);
+            o.transform.SetParent(list);
+            o.transform.localScale = Vector3.one;
+
+            // Position ui element in scroll view
+            RectTransform rt = (RectTransform)o.transform;
+            rt.anchoredPosition = new Vector2(0f,startY-i*height);
+
+            // Icon
+            Image icon = (Image) o.transform.Find("icon").GetComponent<Image>();
+            icon.sprite = CurrentAction.character.skills[i].icon;
+
+            // Name
+            Text nameText = (Text) o.transform.Find("name").GetComponent<Text>();
+            nameText.text = CurrentAction.character.skills[i].name;
+
+            // Button
+            Button button = (Button) o.GetComponent<Button>();
+            int index = i;
+            button.onClick.AddListener(() => SetSkill(index));
+
+            listObjs.Add(o);
+        }
+    }
+    // Generate list of usable items
+    private void ShowItems(){
+        // Clear listObjs
+        if ( listObjs != null && listObjs.Count > 0 ){
+            for (int i = listObjs.Count-1; i >= 0; i--){
+                Destroy(listObjs[i]);
+            }
+        }
+        listObjs = new List<GameObject>();
+
+        // Create list of skills
+        List<Inventory.InventoryItem> inventoryItems = Player.instance.inventory.items.Where((i) => i.item.itemType == ItemType.consumable).ToList();
+        items = new List<Consumable>();
+        foreach (Inventory.InventoryItem ii in inventoryItems){
+            items.Add(ii.item as Consumable);
+        }
+
+        float height = ((RectTransform)list.parent).rect.height;
+        list.sizeDelta = new Vector2(list.sizeDelta.x, height*items.Count);
+        float startY = list.rect.height/2.00f - height/2.00f;
+        for (int i = 0; i < items.Count; i++){
+            GameObject o = Instantiate(listItem);
+            o.transform.SetParent(list);
+            o.transform.localScale = Vector3.one;
+
+            // Position ui element in scroll view
+            RectTransform rt = (RectTransform)o.transform;
+            rt.anchoredPosition = new Vector2(0f,startY-i*height);
+
+            // Icon
+            Image icon = (Image) o.transform.Find("icon").GetComponent<Image>();
+            icon.sprite = items[i].Icon;
+
+            // Name
+            Text nameText = (Text) o.transform.Find("name").GetComponent<Text>();
+            nameText.text = items[i].name;
+
+            // Button
+            Button button = (Button) o.GetComponent<Button>();
+            int index = i;
+            button.onClick.AddListener(() => SetItem(index));
+
+            listObjs.Add(o);
+        }
+    }
     // Setup UI to allow player to perform actions for their characters
     private void PlayerAction(){
         // Display actions
         battleLog.SetActive(false);
         battleMenu.SetActive(true);
         playerActionSelect.SetActive(true);
-        list.SetActive(false);
+        list.gameObject.SetActive(false);
 
         // Reset selectedCharacter
         selectedCharacter = 0;
@@ -126,11 +214,18 @@ public class BattleManager : MonoBehaviour {
     }
     // Cast a spell on a target or targets.
     public void Cast(){
-        
+        actions.Add( new CharacterAction(playerChars[selectedCharacter], ActionType.cast) );
+        battlePhase = BattlePhase.skillSelect;
+
+        // Show list of skills to select
+        ShowSkills();
     }
     // Use an item on a target or targets
     public void Use(){
+        actions.Add( new CharacterAction(playerChars[selectedCharacter], ActionType.use) );
+        battlePhase = BattlePhase.itemSelect;
 
+        ShowItems();
     }
     // Run away from battle. Automatically ends players turn with a chance to e xit battle. 
     public void Run(){
@@ -178,5 +273,14 @@ public class BattleManager : MonoBehaviour {
             // Single target only
             NextPlayerCharacter();
         }
+    }
+    // Set skill for selected character based on index
+    public void SetSkill(int index){
+        CurrentAction.skill = CurrentAction.character.skills[index];
+        battlePhase = BattlePhase.targetSelect;
+    }
+    // Set item for selected character based on index
+    public void SetItem(int index){
+
     }
 }
