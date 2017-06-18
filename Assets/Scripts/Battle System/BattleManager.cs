@@ -110,7 +110,6 @@ public class BattleManager : MonoBehaviour {
             }
         }
         listObjs = new List<GameObject>();
-        listScroll.SetActive(true);
 
         // Create list of skills
         float height = ((RectTransform)list.parent).rect.height;
@@ -150,7 +149,6 @@ public class BattleManager : MonoBehaviour {
             }
         }
         listObjs = new List<GameObject>();
-        listScroll.SetActive(true);
 
         // Create list of skills
         List<Inventory.InventoryItem> inventoryItems = Player.instance.inventory.items.Where((i) => i.item.itemType == ItemType.consumable).ToList();
@@ -190,16 +188,15 @@ public class BattleManager : MonoBehaviour {
     // Setup UI to allow player to perform actions for their characters
     private void PlayerAction(){
         // Display actions
-        battleLog.SetActive(false);
         battleMenu.SetActive(true);
-        playerActionSelect.SetActive(true);
-        listScroll.SetActive(false);
 
         // Reset selectedCharacter
         selectedCharacter = 0;
         
         // Clear actionsList
         actions = new List<CharacterAction>();
+
+        SetPhase(BattlePhase.actionSelect);
     }
     // Move to next playerCharacter
     private void NextPlayerCharacter(){
@@ -208,10 +205,48 @@ public class BattleManager : MonoBehaviour {
         // Check if the player selected actions for all their characters
         if ( selectedCharacter >= playerChars.Count ){
             // End player turn
-            battlePhase = BattlePhase.enemyTurn;
+            SetPhase(BattlePhase.enemyTurn);
         } else {
-            battlePhase = BattlePhase.actionSelect;
+            SetPhase(BattlePhase.actionSelect);
         }
+    }
+    // Set battle phase and update UI accordingly
+    private void SetPhase(BattlePhase phase){
+        battlePhase = phase;
+
+        if ( battlePhase == BattlePhase.actionSelect ){
+            playerActionSelect.SetActive(true);
+            battleLog.SetActive(false);
+            listScroll.SetActive(false);
+        } else if ( battlePhase == BattlePhase.battle ){
+            playerActionSelect.SetActive(false);
+            battleLog.SetActive(true);
+            listScroll.SetActive(false);
+
+            SortActions();
+            StartCoroutine(Battle());
+        } else if ( battlePhase == BattlePhase.end ){
+
+        } else if ( battlePhase == BattlePhase.itemSelect || battlePhase == BattlePhase.skillSelect ){
+            playerActionSelect.SetActive(false);
+            battleLog.SetActive(false);
+            listScroll.SetActive(true);
+        } else if ( battlePhase == BattlePhase.targetSelect ){
+            playerActionSelect.SetActive(false);
+            battleLog.SetActive(false);
+            listScroll.SetActive(false);
+        } else if ( battlePhase == BattlePhase.enemyTurn ){
+            aiManager.SetupActions(actions, monsters, playerChars);
+        }
+    }
+    // Play through battle
+    private IEnumerator Battle(){
+        yield break;
+    }
+    // Sort actions list based on characters speed
+    private void SortActions(){
+        List<CharacterAction> ordered = actions.OrderBy((a) => a.character.combatStats.spd).ToList();
+        actions = ordered;
     }
 
     // All actions a player character can make.
@@ -224,7 +259,7 @@ public class BattleManager : MonoBehaviour {
 
         Debug.Log(playerChars[selectedCharacter].name + " will attack.");
         actions.Add( new CharacterAction(playerChars[selectedCharacter], ActionType.attack) );
-        battlePhase = BattlePhase.targetSelect;
+        SetPhase(BattlePhase.targetSelect);
     }
     // Cast a spell on a target or targets.
     public void Cast(){
@@ -235,7 +270,7 @@ public class BattleManager : MonoBehaviour {
 
         Debug.Log(playerChars[selectedCharacter].name + " will cast a spell.");
         actions.Add( new CharacterAction(playerChars[selectedCharacter], ActionType.cast) );
-        battlePhase = BattlePhase.skillSelect;
+        SetPhase(BattlePhase.skillSelect);
 
         // Show list of skills to select
         ShowSkills();
@@ -249,7 +284,7 @@ public class BattleManager : MonoBehaviour {
 
         Debug.Log(playerChars[selectedCharacter].name + " will use an item.");
         actions.Add( new CharacterAction(playerChars[selectedCharacter], ActionType.use) );
-        battlePhase = BattlePhase.itemSelect;
+        SetPhase(BattlePhase.itemSelect);
 
         ShowItems();
     }
@@ -308,14 +343,17 @@ public class BattleManager : MonoBehaviour {
     public void SetSkill(int index){
         CurrentAction.skill = CurrentAction.character.skills[index];
         Debug.Log("Casting " + CurrentAction.skill.name);
-        battlePhase = BattlePhase.targetSelect;
-        listScroll.SetActive(false);
+        SetPhase(BattlePhase.targetSelect);
     }
     // Set item for selected character based on index
     public void SetItem(int index){
         CurrentAction.usable = items[index];
         Debug.Log("Using " + CurrentAction.usable.name);
-        battlePhase = BattlePhase.targetSelect;
-        listScroll.SetActive(false);
+        SetPhase(BattlePhase.targetSelect);
+    }
+
+    // Start battle when aiManager is complete
+    public void OnEnemyTurnCompleted(){
+        SetPhase(BattlePhase.battle);
     }
 }
