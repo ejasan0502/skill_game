@@ -33,6 +33,7 @@ public class BattleManager : MonoBehaviour {
     private List<CharacterAction> actions;      // List of all actions that will be performed in a battle round
     private List<GameObject> listObjs;          // List of skills or items from list objects
     private List<Consumable> items;             // List of all consumables in player's inventory
+    private bool onAnimEnd = false;             // Determines whether to continue to next animation 
 
     private CharacterAction CurrentAction {
         get {
@@ -236,6 +237,7 @@ public class BattleManager : MonoBehaviour {
             battleLog.SetActive(false);
             listScroll.SetActive(false);
         } else if ( battlePhase == BattlePhase.enemyTurn ){
+            EventManager.AddEventHandler("OnEnemyTurnComplete", OnEnemyTurnComplete);
             aiManager.SetupActions(actions, monsters, playerChars);
         }
     }
@@ -353,7 +355,12 @@ public class BattleManager : MonoBehaviour {
     }
 
     // Start battle when aiManager is complete
-    public void OnEnemyTurnCompleted(){
+    public void OnEnemyTurnComplete(object sender, MyEventArgs args){
         SetPhase(BattlePhase.battle);
+        EventManager.RemoveEventHandler("OnEnemyTurnComplete", OnEnemyTurnComplete);
+    }
+    // Called when a sprite finishes an animation during battle coroutine
+    public void OnAnimEnd(object sender, MyEventArgs args){
+
     }
 }

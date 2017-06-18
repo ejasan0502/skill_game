@@ -13,7 +13,7 @@ public class AIManager {
             actions[actions.Count-1].targets.Add(playerChars[Random.Range(0,playerChars.Count)]);
         }
 
-        GameObject.FindObjectOfType<BattleManager>().OnEnemyTurnCompleted();
+        EventManager.TriggerEvent("OnEnemyTurnComplete", MyEventArgs.empty);
     }
 
 }
