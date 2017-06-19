@@ -10,6 +10,7 @@ using UnityEngine.UI;
 public class BattleManager : MonoBehaviour {
 
     private const int MAX_MONSTER_COUNT = 5;
+    private const string PATH_EFFECT_ATK = "Effects/attack";
 
     public float playerSpacing = 2f;            // Space between player characters
     public BattlePhase battlePhase;             // Current phase of battle
@@ -243,6 +244,57 @@ public class BattleManager : MonoBehaviour {
     }
     // Play through battle
     private IEnumerator Battle(){
+        onAnimEnd = false;
+
+        foreach (CharacterAction action in actions){
+            EventManager.AddEventHandler("OnAnimEnd", OnAnimEnd);
+            
+            // Apply cast effect
+            if ( action.action == ActionType.attack ){
+                action.characterObj.anim.SetBool("attack",true);
+            } else if ( action.action == ActionType.cast ){
+                if ( action.skill.castEffect != null ){
+                    if ( action.skill.IsAoe ){
+                        // Instantiate in center of screen
+                        Instantiate(action.skill.castEffect);
+                    } else {
+                        // Instantiate on caster
+                        GameObject o = Instantiate(action.skill.castEffect);
+                        o.transform.position = action.characterObj.transform.position;
+                    }
+                }
+
+                action.characterObj.anim.SetBool("cast",true);
+            } else if ( action.action == ActionType.use ){
+                action.characterObj.anim.SetBool("use",true);
+            }
+
+            yield return new WaitUntil(() => onAnimEnd );
+
+            // Apply hit effect
+            if ( action.action == ActionType.attack ){
+                GameObject o = (GameObject) Instantiate(Resources.Load(PATH_EFFECT_ATK));
+                o.transform.position = action.targets[0].transform.position;
+
+                float rawDmg = action.character.combatStats.PhysicalDamage;
+                action.targets[0].Hit(rawDmg);
+            } else if ( action.action == ActionType.cast ){
+                if ( action.skill.hitEffect != null ){
+                    if ( action.skill.IsAoe ){
+                        for (int i = 0; i < action.targets.Count; i++){
+                            GameObject o = Instantiate(action.skill.hitEffect);
+                            o.transform.position = action.targets[i].transform.position;
+                        }
+                    } else {
+                        GameObject o = (GameObject) Instantiate(action.skill.hitEffect);
+                        o.transform.position = action.targets[0].transform.position;
+                    }
+                }
+            } else if ( action.action == ActionType.use ){
+                // To Do
+            }
+        }
+        
         yield break;
     }
     // Sort actions list based on characters speed
@@ -361,6 +413,6 @@ public class BattleManager : MonoBehaviour {
     }
     // Called when a sprite finishes an animation during battle coroutine
     public void OnAnimEnd(object sender, MyEventArgs args){
-
+        onAnimEnd = true;
     }
 }
