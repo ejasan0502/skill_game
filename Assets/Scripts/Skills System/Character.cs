@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System.Linq;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -71,6 +72,7 @@ public class Character {
             charStats.health = maxCharStats.health;
         }
     }
+
     // Give character a buff
     public void AddBuff(Buff buff){
         buffs.Add(buff, buff.duration);
@@ -79,6 +81,10 @@ public class Character {
     // Give character a status effect
     public void AddStatus(StatusEffect status){
         statusEffects.Add(status, status.duration);
+    }
+    // Add skill to skills list.
+    public void AddSkill(Skill skill){
+        Player.instance.character.skills.Add(new Skill(skill));
     }
 
     // Apply all status effects at the end turn

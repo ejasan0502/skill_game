@@ -4,6 +4,7 @@ using UnityEngine;
 
 // Applies a status type to a target or targets
 // Only certain status effects will work with certain element types. Ex./ poison status effect will only work with a toxic element type skill
+[System.Serializable]
 public class StatusEffect : Effect {
 
     public Status status;

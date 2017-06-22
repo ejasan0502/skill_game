@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 // Increases current health on target or targets
+[System.Serializable]
 public class Heal : Effect {
 
     public float amount;

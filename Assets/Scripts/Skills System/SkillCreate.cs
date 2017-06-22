@@ -23,13 +23,11 @@ public class SkillCreate : MonoBehaviour {
     private Text chanceText;                    // Text of chance to craft
     private RectTransform charactersRect;       // Rect Transform of where to place character icons for selection
 
-    private Character character;                                                                // Character to save skill to
     private float chanceToCraft = 100f;                                                         // Current chance to successfully craft the skill
     private Skill toCraft = null;                                                               // Current skill settings by combining skillGems
     private List<SkillGem> skillGems = new List<SkillGem>();                                    // Currently selected skill gems to combine
     private List<GameObject> gemsUI = new List<GameObject>();                                   // UI objects for gems
     private List<Inventory.InventoryItem> gems = new List<Inventory.InventoryItem>();           // All skillGems in player's inventory
-    private List<GameObject> charactersUI = new List<GameObject>();                             // All player characters
 
     void Awake(){
         // Look for skillInfoText
@@ -51,7 +49,6 @@ public class SkillCreate : MonoBehaviour {
         saveSkill.SetActive(false);
 
         GenerateList();
-        GenerateCharacterList();
     }
 
     // UI Methods
@@ -88,17 +85,17 @@ public class SkillCreate : MonoBehaviour {
     // Give skill to character
     public void SaveSkillToCharacter(){
         // Make sure we have a skill to save
-        if ( toCraft != null && character != null ){
+        if ( toCraft != null ){
             // Check if there is a duplicate skill
-            Skill duplicate = character.skills.Where<Skill>( (s) => s.name == toCraft.name).FirstOrDefault();
+            Skill duplicate = Player.instance.character.skills.Where<Skill>( (s) => s.name == toCraft.name).FirstOrDefault();
             if ( duplicate == null ){
-                Debug.Log("Skill saved to " + character.name);
-                character.skills.Add(new Skill(toCraft));
+                Debug.Log(Player.instance.character.name + " gained the skill, " + toCraft.name);
+                Player.instance.character.AddSkill(toCraft);
                 toCraft = null;
-                character = null;
                 gameObject.SetActive(false);
             } else {
                 // There cannot be skills with the same name, Replace or change name of skill
+                Debug.Log(duplicate.name + " already exists in skill library. Input another name for the skill.");
             }
         }
     }
@@ -157,26 +154,16 @@ public class SkillCreate : MonoBehaviour {
 
         UpdateSkill();
     }
-    // Select character to give skill to
-    public void SelectCharacter(int index){
-        if ( index < Player.instance.characters.Count ){
-            character = Player.instance.characters[index];
-
-            for (int i = 0; i < Player.instance.characters.Count; i++){
-                if ( character == Player.instance.characters[i] ){
-                    charactersUI[i].GetComponent<Image>().color = Color.yellow;
-                } else {
-                    charactersUI[i].GetComponent<Image>().color = Color.white;
-                }
-            }
-        }
-    }
 
     // Update the skill to craft
     // For UI purposes
     private void UpdateSkill(){
         // Clear last settings of the crafting skill
         toCraft = new Skill();
+
+        // Apply name and description to skill
+        toCraft.name = nameField.text;
+        toCraft.description = descriptionField.text;
 
         // Apply skillGems to skill
         chanceToCraft = 0f;
@@ -259,34 +246,6 @@ public class SkillCreate : MonoBehaviour {
             button.onClick.AddListener(() => Select(index));
 
             gemsUI.Add(o);
-        }
-    }
-    // Generate UI list of player characters
-    private void GenerateCharacterList(){
-        // Clear current characters in UI
-        if ( charactersUI.Count > 0 ){
-            for (int i = charactersUI.Count-1; i >= 0; i--){
-                Destroy(charactersUI[i]);
-            }
-            charactersUI = new List<GameObject>();
-        }
-
-        List<Character> characters = Player.instance.characters;
-        float startY = charactersRect.rect.height/2.00f;
-        float height = ((RectTransform)characterIcon.transform).rect.height;
-        for (int i = 0; i < characters.Count; i++){
-            int index = i;
-
-            GameObject o = Instantiate(characterIcon);
-            o.transform.SetParent(charactersRect);
-            o.transform.localScale = Vector3.one;
-
-            ((RectTransform)o.transform).anchoredPosition = new Vector2(0f,startY-i*height);
-
-            o.GetComponent<Image>().sprite = characters[i].icon;
-            o.GetComponent<Button>().onClick.AddListener(() => SelectCharacter(index));
-
-            charactersUI.Add(o);
         }
     }
 }

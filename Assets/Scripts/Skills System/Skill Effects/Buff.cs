@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 // Increases stats on target or targets
+[System.Serializable]
 public class Buff : Effect, IComparable {
 
     public bool percent;

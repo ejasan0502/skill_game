@@ -3,11 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// Defines player object in scene
 public class Player : MonoBehaviour {
 
     public Inventory inventory;
-    public List<Character> characters;
-    public Region currentRegion = Region.Tutorial;
+    public Character character;
 
     private List<SkillGem> gems = new List<SkillGem>(){
         new ElementGem("Pearl", "White ball thing.", "", Tier.common, ItemType.skillGem, SkillGemType.pearl, "", ""),
@@ -16,12 +16,6 @@ public class Player : MonoBehaviour {
         new EffectGem("Peridot", "Green diamondish thing.", "", Tier.rare, ItemType.skillGem, SkillGemType.peridot, new Heal(10,true)),
         new EffectGem("Opal", "Ball thing", "", Tier.legendary, ItemType.skillGem, SkillGemType.opal, new Buff(false,1,new AttributeStats(2,1),null,null))
     };
-
-    public string RegionPath {
-        get {
-            return "Monsters/" + currentRegion.ToString();
-        }
-    }
 
     private static Player _instance;
     public static Player instance {
@@ -38,13 +32,6 @@ public class Player : MonoBehaviour {
 
         foreach (SkillGem gem in gems){
             inventory.AddItem(gem, 1);
-        }
-    }
-
-    public void AddCharacter(Character character){
-        Character duplicate = characters.Where<Character>( (c) => c.name == character.name).FirstOrDefault();
-        if ( duplicate == null ){
-            characters.Add(character);
         }
     }
 }

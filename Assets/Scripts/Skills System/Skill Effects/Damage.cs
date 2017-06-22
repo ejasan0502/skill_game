@@ -4,6 +4,7 @@ using UnityEngine;
 
 // Damage effect
 // Inflict health on target or targets over effect duration
+[System.Serializable]
 public class Damage : Effect {
 
     public int hitCount = 1;

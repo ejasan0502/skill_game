@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 // Defines the properties of a skill
+[System.Serializable]
 public class Skill {
 
     private const string DEFAULT_ICON = "Icons/Skills/default";
