@@ -90,7 +90,8 @@ public class SkillCreate : MonoBehaviour {
             // Check if there is a duplicate skill
             Skill duplicate = Player.instance.character.skills.Where<Skill>( (s) => s.name == toCraft.name).FirstOrDefault();
             if ( duplicate == null ){
-                UpdateSkill();
+                toCraft.name = nameField.text;
+                toCraft.description = descriptionField.text;
 
                 Debug.Log(Player.instance.character.name + " gained the skill, " + toCraft.name);
                 Player.instance.character.AddSkill(toCraft);
@@ -191,8 +192,8 @@ public class SkillCreate : MonoBehaviour {
 
         // Element and Graphics
         text += "Element: " + toCraft.elementType.ToString() + "\n";
-        text += "Cast Effect: " + (toCraft.castEffect != null ? toCraft.castEffect : "None") + "\n";
-        text += "Hit Effect: " + (toCraft.hitEffect != null ? toCraft.hitEffect : "None") + "\n";
+        text += "Cast Effect: " + (toCraft.castEffect != "" ? toCraft.castEffect : "None") + "\n";
+        text += "Hit Effect: " + (toCraft.hitEffect != "" ? toCraft.hitEffect : "None") + "\n";
 
         // Target Count
         text += "Target Count: " + toCraft.targetCount + "\n";

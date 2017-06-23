@@ -13,6 +13,7 @@ public class EffectObj : MonoBehaviour {
     public void Trigger(){
         if ( player != null && eventName != "" ){
             player.eventManager.TriggerEvent(eventName,MyEventArgs.empty);
+            Destroy(gameObject);
         }
     }
 }

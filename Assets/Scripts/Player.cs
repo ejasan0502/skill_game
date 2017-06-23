@@ -41,6 +41,7 @@ public class Player : MonoBehaviour {
     // Cast the skill with the given index
     public void Cast(int index){
         if ( index < character.skills.Count && index >= 0 ){
+            Debug.Log("Casting skill #" + index);
             eventManager.AddEventHandler("OnCastEnd", OnCastEnd);
 
             GameObject o = (GameObject) Instantiate(Resources.Load("EffectObj"));
@@ -51,12 +52,14 @@ public class Player : MonoBehaviour {
             eo.eventName = "OnCastEnd";
             eo.player = this;
 
+            string castEffect = character.skills[index].castEffect;
             Animator anim = o.GetComponent<Animator>();
-            anim.Play(character.skills[index].castEffect);
+            anim.Play(castEffect);
         }
     }
     // Called at the end of cast effect animation
     public void OnCastEnd(object sender, MyEventArgs args){
         Debug.Log("OnCastEnd");
+        eventManager.RemoveEventHandler("OnCastEnd", OnCastEnd);
     }
 }
