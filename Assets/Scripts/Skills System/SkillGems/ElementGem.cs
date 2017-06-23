@@ -7,15 +7,15 @@ using UnityEngine;
 public class ElementGem : SkillGem {
 
     public ElementType element;
-    public string castEffectPath;
-    public string hitEffectPath;
+    public string castEffect;
+    public string hitEffect;
 
     public ElementGem(string name, string description, string iconPath, Tier tier, ItemType itemType,
                       SkillGemType gemType,
-                      string castEffectPath, string hitEffectPath) :
+                      string castEffect, string hitEffect) :
                       base (name, description, iconPath, tier, itemType, gemType){
-        this.castEffectPath = castEffectPath;
-        this.hitEffectPath = hitEffectPath;
+        this.castEffect = castEffect;
+        this.hitEffect = hitEffect;
 
         if ( (int)gemType > 9 ){
             Debug.LogError(name + " has an invalid gemType for ElementGem!");
@@ -37,8 +37,8 @@ public class ElementGem : SkillGem {
 
     public override void ApplyTo(Skill skill){
         skill.elementType = element;
-        skill.castEffect = (GameObject) Resources.Load(castEffectPath);
-        skill.hitEffect = (GameObject) Resources.Load(hitEffectPath);
+        skill.castEffect = castEffect;
+        skill.hitEffect = hitEffect;
     }
 
 }

@@ -19,8 +19,8 @@ public class Skill {
             return Resources.Load<Sprite>(iconPath) ?? Resources.Load<Sprite>(DEFAULT_ICON);
         }
     }
-    public GameObject castEffect;
-    public GameObject hitEffect;
+    public string castEffect;
+    public string hitEffect;
 
     // Effect variables
     // These variables directly applies to a target or targets
@@ -40,8 +40,8 @@ public class Skill {
         name = "";
         description = "";
         iconPath = "";
-        castEffect = null;
-        hitEffect = null;
+        castEffect = "";
+        hitEffect = "";
         targetCount = 1;
         elementType = ElementType.physical;
         effects = new List<Effect>();

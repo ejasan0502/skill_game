@@ -11,6 +11,7 @@ using UnityEngine.UI;
 public class SkillCreate : MonoBehaviour {
 
     [Header("Object References")]
+    public GameObject skillsUI;
     public InputField nameField;
     public InputField descriptionField;
     public RectTransform contentTrans;
@@ -89,9 +90,11 @@ public class SkillCreate : MonoBehaviour {
             // Check if there is a duplicate skill
             Skill duplicate = Player.instance.character.skills.Where<Skill>( (s) => s.name == toCraft.name).FirstOrDefault();
             if ( duplicate == null ){
+                UpdateSkill();
+
                 Debug.Log(Player.instance.character.name + " gained the skill, " + toCraft.name);
                 Player.instance.character.AddSkill(toCraft);
-                toCraft = null;
+                skillsUI.SetActive(true);
                 gameObject.SetActive(false);
             } else {
                 // There cannot be skills with the same name, Replace or change name of skill
@@ -104,6 +107,8 @@ public class SkillCreate : MonoBehaviour {
         // Make sure we have a skill to save
         if ( toCraft != null ){
             Player.instance.inventory.AddItem(new Rune(toCraft),1);
+            gameObject.SetActive(false);
+            skillsUI.SetActive(true);
         }
     }
     // Add skillGem to pool based on index from gems list
@@ -155,6 +160,11 @@ public class SkillCreate : MonoBehaviour {
         UpdateSkill();
     }
 
+    public void OpenSkillsUI(){
+        skillsUI.SetActive(true);
+        gameObject.SetActive(false);
+    }
+
     // Update the skill to craft
     // For UI purposes
     private void UpdateSkill(){
@@ -181,8 +191,8 @@ public class SkillCreate : MonoBehaviour {
 
         // Element and Graphics
         text += "Element: " + toCraft.elementType.ToString() + "\n";
-        text += "Cast Effect: " + (toCraft.castEffect != null ? toCraft.castEffect.name : "None") + "\n";
-        text += "Hit Effect: " + (toCraft.hitEffect != null ? toCraft.hitEffect.name : "None") + "\n";
+        text += "Cast Effect: " + (toCraft.castEffect != null ? toCraft.castEffect : "None") + "\n";
+        text += "Hit Effect: " + (toCraft.hitEffect != null ? toCraft.hitEffect : "None") + "\n";
 
         // Target Count
         text += "Target Count: " + toCraft.targetCount + "\n";
