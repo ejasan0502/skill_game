@@ -31,6 +31,11 @@ public class StatusEffect : Effect {
         duration = 0;
         percent = false;
     }
+    public StatusEffect(Status status, int duration, bool percent){
+        this.status = status;
+        this.duration = duration;
+        this.percent = percent;
+    }
     public StatusEffect(StatusEffect statusEffect){
         this.status = statusEffect.status;
         this.duration = statusEffect.duration;

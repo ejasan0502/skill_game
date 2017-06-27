@@ -10,6 +10,22 @@ using UnityEngine.UI;
 // require skill gems that cover all variables of the skill.
 public class SkillCreate : MonoBehaviour {
 
+    private const int MAX_GEMTYPE_COUNT = 20;
+
+    // List of all available castEffects and hitEffects organized by tiers
+    public Dictionary<Tier, List<string>> castEffects = new Dictionary<Tier,List<string>>(){
+        { Tier.common, new List<string>(){"Stimulate", "Arrow Rain", "Asura", "Wind of Frey"} },
+        { Tier.rare, new List<string>(){"Epic Adventure"} },
+        { Tier.unique, new List<string>(){"Trueshot"} },
+        { Tier.legendary, new List<string>(){"Hammer Crash"} }
+    };
+    public Dictionary<Tier, List<string>> hitEffects = new Dictionary<Tier,List<string>>(){
+        { Tier.common, new List<string>(){""} },
+        { Tier.rare, new List<string>(){"Butterfly Hit"} },
+        { Tier.unique, new List<string>(){"Explosion Hits"} },
+        { Tier.legendary, new List<string>(){"Energy Pillar"} }
+    };
+
     [Header("Object References")]
     public GameObject skillsUI;
     public InputField nameField;
@@ -100,6 +116,8 @@ public class SkillCreate : MonoBehaviour {
             } else {
                 // There cannot be skills with the same name, Replace or change name of skill
                 Debug.Log(duplicate.name + " already exists in skill library. Input another name for the skill.");
+                selectSkillGems.SetActive(true);
+                saveSkill.SetActive(false);
             }
         }
     }
@@ -160,7 +178,86 @@ public class SkillCreate : MonoBehaviour {
 
         UpdateSkill();
     }
+    // Add a new randomly generated skillGem
+    public void AddSkillGem(){
+        int randomNum = UnityEngine.Random.Range(1,MAX_GEMTYPE_COUNT);
 
+        // Since skillGem category is based on range of ints, check which gem should be created whether
+        // randomNum is less than or equal to the category num
+        int randomTier = UnityEngine.Random.Range(0,100);
+        Tier tier = Tier.common;
+        if ( randomTier <= 5 ) tier = Tier.legendary;
+        else if ( randomTier <= 25 ) tier = Tier.unique;
+        else if ( randomTier <= 60 ) tier = Tier.rare;
+
+        SkillGemType gemType = (SkillGemType)Enum.ToObject(typeof(SkillGemType),randomNum);
+        string gemName = ((SkillGemType)randomNum).ToString();
+        Debug.Log("Generating " + tier + " " + gemName);
+        if ( randomNum <= (int)SkillGemCategory.elementGem ){
+
+            // Grab random castEffect and hitEffect
+            string castEffect = "", hitEffect = "";
+            castEffect = castEffects[tier][UnityEngine.Random.Range(0,castEffects[tier].Count)];
+            hitEffect = hitEffects[tier][UnityEngine.Random.Range(0,hitEffects[tier].Count)];
+
+            ElementGem gem = new ElementGem( gemName, 
+                                             "Random generated skillGem", 
+                                             "", 
+                                             tier,
+                                             ItemType.skillGem,
+                                             gemType,
+                                             castEffect,
+                                             hitEffect );
+            Player.instance.inventory.AddItem(gem,1);
+        } else if ( randomNum <= (int)SkillGemCategory.damageEffect ){
+            float min = UnityEngine.Random.Range(1,100);
+            float max = min + UnityEngine.Random.Range(3,50);
+
+            EffectGem gem = new EffectGem( gemName,
+                                           "Random generated skillGem",
+                                           "",
+                                           tier,
+                                           ItemType.skillGem,
+                                           gemType,
+                                           new Damage(min, max, 1, false));
+            Player.instance.inventory.AddItem(gem,1);
+        } else if ( randomNum <= (int)SkillGemCategory.healEffect ){
+            EffectGem gem = new EffectGem( gemName,
+                                           "Random generated skillGem",
+                                           "",
+                                           tier,
+                                           ItemType.skillGem,
+                                           gemType,
+                                           new Heal(UnityEngine.Random.Range(10,100), false));
+            Player.instance.inventory.AddItem(gem,1);
+        } else if ( randomNum <= (int)SkillGemCategory.buffEffect ){
+            EffectGem gem = new EffectGem( gemName,
+                                           "Random generated skillGem",
+                                           "",
+                                           tier,
+                                           ItemType.skillGem,
+                                           gemType,
+                                           new Buff(false,
+                                                    60,
+                                                    new AttributeStats(),
+                                                    new CharStats(),
+                                                    new CombatStats()));
+            Player.instance.inventory.AddItem(gem,1);
+        } else if ( randomNum <= (int)SkillGemCategory.statusEffect ){
+            EffectGem gem = new EffectGem( gemName,
+                                           "Random generated skillGem",
+                                           "",
+                                           tier,
+                                           ItemType.skillGem,
+                                           gemType,
+                                           new StatusEffect());
+            Player.instance.inventory.AddItem(gem,1);
+        }
+
+        GenerateList();
+    }
+
+    // Switch UI to skills showcase
     public void OpenSkillsUI(){
         skillsUI.SetActive(true);
         gameObject.SetActive(false);
@@ -249,7 +346,7 @@ public class SkillCreate : MonoBehaviour {
 
             // Amount
             Text amount = (Text) o.transform.GetChild(2).GetComponent<Text>();
-            amount.text = ((SkillGem)gems[i].item).gemType.ToString();
+            amount.text = gems[i].item.tier+"";
 
             // Add listener when selecting this skillGem
             Button button = o.GetComponent<Button>();
