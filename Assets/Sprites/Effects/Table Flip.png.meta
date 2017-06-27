@@ -1,0 +1,532 @@
+fileFormatVersion: 2
+guid: f5498f73de64e2f40811b12bd87b272c
+timeCreated: 1498585964
+licenseType: Free
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: Table Flip_0
+    21300002: Table Flip_1
+    21300004: Table Flip_2
+    21300006: Table Flip_3
+    21300008: Table Flip_4
+    21300010: Table Flip_5
+    21300012: Table Flip_6
+    21300014: Table Flip_7
+    21300016: Table Flip_8
+    21300018: Table Flip_9
+    21300020: Table Flip_10
+    21300022: Table Flip_11
+    21300024: Table Flip_12
+    21300026: Table Flip_13
+    21300028: Table Flip_14
+    21300030: Table Flip_15
+    21300032: Table Flip_16
+    21300034: Table Flip_17
+    21300036: Table Flip_18
+    21300038: Table Flip_19
+    21300040: Table Flip_20
+    21300042: Table Flip_21
+    21300044: Table Flip_22
+    21300046: Table Flip_23
+    21300048: Table Flip_24
+    21300050: Table Flip_25
+    21300052: Table Flip_26
+    21300054: Table Flip_27
+    21300056: Table Flip_28
+    21300058: Table Flip_29
+    21300060: Table Flip_30
+    21300062: Table Flip_31
+  serializedVersion: 4
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: -1
+    aniso: -1
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaUsage: 2
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  platformSettings:
+  - buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+  - buildTarget: Standalone
+    maxTextureSize: 2048
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+  - buildTarget: Android
+    maxTextureSize: 2048
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Table Flip_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 3912
+        width: 895
+        height: 652
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Table Flip_1
+      rect:
+        serializedVersion: 2
+        x: 895
+        y: 3912
+        width: 895
+        height: 652
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Table Flip_2
+      rect:
+        serializedVersion: 2
+        x: 1790
+        y: 3912
+        width: 895
+        height: 652
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Table Flip_3
+      rect:
+        serializedVersion: 2
+        x: 2685
+        y: 3912
+        width: 895
+        height: 652
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Table Flip_4
+      rect:
+        serializedVersion: 2
+        x: 3580
+        y: 3912
+        width: 895
+        height: 652
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Table Flip_5
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 3260
+        width: 895
+        height: 652
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Table Flip_6
+      rect:
+        serializedVersion: 2
+        x: 895
+        y: 3260
+        width: 895
+        height: 652
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Table Flip_7
+      rect:
+        serializedVersion: 2
+        x: 1790
+        y: 3260
+        width: 895
+        height: 652
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Table Flip_8
+      rect:
+        serializedVersion: 2
+        x: 2685
+        y: 3260
+        width: 895
+        height: 652
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Table Flip_9
+      rect:
+        serializedVersion: 2
+        x: 3580
+        y: 3260
+        width: 895
+        height: 652
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Table Flip_10
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 2608
+        width: 895
+        height: 652
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Table Flip_11
+      rect:
+        serializedVersion: 2
+        x: 895
+        y: 2608
+        width: 895
+        height: 652
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Table Flip_12
+      rect:
+        serializedVersion: 2
+        x: 1790
+        y: 2608
+        width: 895
+        height: 652
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Table Flip_13
+      rect:
+        serializedVersion: 2
+        x: 2685
+        y: 2608
+        width: 895
+        height: 652
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Table Flip_14
+      rect:
+        serializedVersion: 2
+        x: 3580
+        y: 2608
+        width: 895
+        height: 652
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Table Flip_15
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1956
+        width: 895
+        height: 652
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Table Flip_16
+      rect:
+        serializedVersion: 2
+        x: 895
+        y: 1956
+        width: 895
+        height: 652
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Table Flip_17
+      rect:
+        serializedVersion: 2
+        x: 1790
+        y: 1956
+        width: 895
+        height: 652
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Table Flip_18
+      rect:
+        serializedVersion: 2
+        x: 2685
+        y: 1956
+        width: 895
+        height: 652
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Table Flip_19
+      rect:
+        serializedVersion: 2
+        x: 3580
+        y: 1956
+        width: 895
+        height: 652
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Table Flip_20
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1304
+        width: 895
+        height: 652
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Table Flip_21
+      rect:
+        serializedVersion: 2
+        x: 895
+        y: 1304
+        width: 895
+        height: 652
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Table Flip_22
+      rect:
+        serializedVersion: 2
+        x: 1790
+        y: 1304
+        width: 895
+        height: 652
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Table Flip_23
+      rect:
+        serializedVersion: 2
+        x: 2685
+        y: 1304
+        width: 895
+        height: 652
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Table Flip_24
+      rect:
+        serializedVersion: 2
+        x: 3580
+        y: 1304
+        width: 895
+        height: 652
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Table Flip_25
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 652
+        width: 895
+        height: 652
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Table Flip_26
+      rect:
+        serializedVersion: 2
+        x: 895
+        y: 652
+        width: 895
+        height: 652
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Table Flip_27
+      rect:
+        serializedVersion: 2
+        x: 1790
+        y: 652
+        width: 895
+        height: 652
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Table Flip_28
+      rect:
+        serializedVersion: 2
+        x: 2685
+        y: 652
+        width: 895
+        height: 652
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Table Flip_29
+      rect:
+        serializedVersion: 2
+        x: 3580
+        y: 652
+        width: 895
+        height: 652
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Table Flip_30
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 895
+        height: 652
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Table Flip_31
+      rect:
+        serializedVersion: 2
+        x: 895
+        y: 0
+        width: 895
+        height: 652
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    outline: []
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
