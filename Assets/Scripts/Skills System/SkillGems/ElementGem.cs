@@ -7,13 +7,15 @@ using UnityEngine;
 public class ElementGem : SkillGem {
 
     public ElementType element;
+    public Vector3 castOffset;
     public string castEffect;
     public string hitEffect;
 
     public ElementGem(string name, string description, string iconPath, Tier tier, ItemType itemType,
                       SkillGemType gemType,
-                      string castEffect, string hitEffect) :
+                      Vector3 castOffset, string castEffect, string hitEffect) :
                       base (name, description, iconPath, tier, itemType, gemType){
+        this.castOffset = castOffset;
         this.castEffect = castEffect;
         this.hitEffect = hitEffect;
 
@@ -37,6 +39,7 @@ public class ElementGem : SkillGem {
 
     public override void ApplyTo(Skill skill){
         skill.elementType = element;
+        skill.castOffset = castOffset;
         skill.castEffect = castEffect;
         skill.hitEffect = hitEffect;
     }

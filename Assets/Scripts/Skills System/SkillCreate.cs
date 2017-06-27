@@ -12,19 +12,25 @@ public class SkillCreate : MonoBehaviour {
 
     private const int MAX_GEMTYPE_COUNT = 20;
 
-    // List of all available castEffects and hitEffects organized by tiers
-    public Dictionary<Tier, List<string>> castEffects = new Dictionary<Tier,List<string>>(){
-        { Tier.common, new List<string>(){"Stimulate", "Arrow Rain", "Asura", "Wind of Frey"} },
-        { Tier.rare, new List<string>(){"Epic Adventure"} },
-        { Tier.unique, new List<string>(){"Trueshot"} },
-        { Tier.legendary, new List<string>(){"Hammer Crash"} }
-    };
-    public Dictionary<Tier, List<string>> hitEffects = new Dictionary<Tier,List<string>>(){
-        { Tier.common, new List<string>(){""} },
-        { Tier.rare, new List<string>(){"Butterfly Hit"} },
-        { Tier.unique, new List<string>(){"Explosion Hits"} },
-        { Tier.legendary, new List<string>(){"Energy Pillar"} }
-    };
+    [System.Serializable]
+    public class EffectGraphic {
+        public Vector3 castOffset;
+        public AnimationClip cast;
+        public AnimationClip hit;
+    }
+    [System.Serializable]
+    public class EffectsList {
+        public Tier tier;
+        public List<EffectGraphic> effects;
+
+        public EffectGraphic RandomEffect {
+            get {
+                return effects[UnityEngine.Random.Range(0,effects.Count)];
+            }
+        }
+    }
+    // List of all available castEffects and hitEffects based on tier
+    public List<EffectsList> skillEffects;
 
     [Header("Object References")]
     public GameObject skillsUI;
@@ -196,16 +202,19 @@ public class SkillCreate : MonoBehaviour {
         if ( randomNum <= (int)SkillGemCategory.elementGem ){
 
             // Grab random castEffect and hitEffect
-            string castEffect = "", hitEffect = "";
-            castEffect = castEffects[tier][UnityEngine.Random.Range(0,castEffects[tier].Count)];
-            hitEffect = hitEffects[tier][UnityEngine.Random.Range(0,hitEffects[tier].Count)];
+            EffectsList effectsList = GetEffectsList(tier);
+            EffectGraphic effect = effectsList.RandomEffect;
 
+            string castEffect = "", hitEffect = "";
+            castEffect = effect.cast.name;
+            hitEffect = effect.hit.name;
             ElementGem gem = new ElementGem( gemName, 
                                              "Random generated skillGem", 
                                              "", 
                                              tier,
                                              ItemType.skillGem,
                                              gemType,
+                                             effect.castOffset,
                                              castEffect,
                                              hitEffect );
             Player.instance.inventory.AddItem(gem,1);
@@ -308,7 +317,6 @@ public class SkillCreate : MonoBehaviour {
 
         skillInfoText.text = text;
     }
-
     // Generate UI list of skillGems available to craft with
     private void GenerateList(){
         // Clear UI objects if any
@@ -368,5 +376,9 @@ public class SkillCreate : MonoBehaviour {
 
             gemsUI.Add(o);
         }
+    }
+    // Return list of effects based on tier param
+    private EffectsList GetEffectsList(Tier tier){
+        return skillEffects.Where<EffectsList>((se) => se.tier == tier).FirstOrDefault();
     }
 }

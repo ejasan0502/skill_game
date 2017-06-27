@@ -10,14 +10,8 @@ public class Player : MonoBehaviour {
     public Character character;
     public EventManager eventManager;
 
+    private GameObject castObj;
     private int castIndex = -1;                             // Save index of casted spell to apply effects of skill
-    private List<SkillGem> gems = new List<SkillGem>(){
-        new ElementGem("Pearl", "White ball thing.", "", Tier.common, ItemType.skillGem, SkillGemType.pearl, "Wind of Frey", ""),
-        new EffectGem("Spinel", "Weird greenish thing.", "", Tier.common, ItemType.skillGem, SkillGemType.spinel, new Damage(1f,3f,1,false)),
-        new ElementGem("Moonstone", "White oval thing.", "", Tier.common, ItemType.skillGem, SkillGemType.moonstone, "", ""),
-        new EffectGem("Peridot", "Green diamondish thing.", "", Tier.rare, ItemType.skillGem, SkillGemType.peridot, new Heal(10,true)),
-        new EffectGem("Opal", "Ball thing", "", Tier.legendary, ItemType.skillGem, SkillGemType.opal, new Buff(false,1,new AttributeStats(2,1),null,null))
-    };
 
     private static Player _instance;
     public static Player instance {
@@ -32,10 +26,7 @@ public class Player : MonoBehaviour {
     void Awake(){
         inventory = new Inventory();
         eventManager = new EventManager();
-
-        foreach (SkillGem gem in gems){
-            inventory.AddItem(gem, 1);
-        }
+        castObj = transform.Find("Cast").gameObject;
     }
 
     // Cast the skill with the given index
@@ -44,16 +35,16 @@ public class Player : MonoBehaviour {
             Debug.Log("Casting skill #" + index);
             eventManager.AddEventHandler("OnCastEnd", OnCastEnd);
 
-            GameObject o = (GameObject) Instantiate(Resources.Load("EffectObj"));
-            o.transform.SetParent(transform);
-            o.transform.localPosition = Vector3.zero;
+            castObj.SetActive(true);
+            Debug.Log(character.skills[index].castOffset+"");
+            castObj.transform.localPosition = character.skills[index].castOffset;
 
-            EffectObj eo = o.GetComponent<EffectObj>();
+            EffectObj eo = castObj.GetComponent<EffectObj>();
             eo.eventName = "OnCastEnd";
             eo.player = this;
 
             string castEffect = character.skills[index].castEffect;
-            Animator anim = o.GetComponent<Animator>();
+            Animator anim = castObj.GetComponent<Animator>();
             anim.Play(castEffect);
         }
     }
@@ -61,5 +52,6 @@ public class Player : MonoBehaviour {
     public void OnCastEnd(object sender, MyEventArgs args){
         Debug.Log("OnCastEnd");
         eventManager.RemoveEventHandler("OnCastEnd", OnCastEnd);
+        castObj.SetActive(false);
     }
 }

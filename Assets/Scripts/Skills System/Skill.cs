@@ -19,6 +19,7 @@ public class Skill {
             return Resources.Load<Sprite>(iconPath) ?? Resources.Load<Sprite>(DEFAULT_ICON);
         }
     }
+    public Vector3 castOffset;
     public string castEffect;
     public string hitEffect;
 
@@ -40,6 +41,7 @@ public class Skill {
         name = "";
         description = "";
         iconPath = "";
+        castOffset = Vector3.zero;
         castEffect = "";
         hitEffect = "";
         targetCount = 1;
@@ -50,6 +52,7 @@ public class Skill {
         this.name = skill.name;
         this.description = skill.description;
         this.iconPath = skill.iconPath;
+        this.castOffset = skill.castOffset;
         this.castEffect = skill.castEffect;
         this.hitEffect = skill.hitEffect;
         this.targetCount = skill.targetCount;
