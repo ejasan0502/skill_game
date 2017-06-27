@@ -346,7 +346,20 @@ public class SkillCreate : MonoBehaviour {
 
             // Amount
             Text amount = (Text) o.transform.GetChild(2).GetComponent<Text>();
-            amount.text = gems[i].item.tier+"";
+            string text = "";
+            SkillGemType gemType = ((SkillGem)gems[i].item).gemType;
+            if ( (int)gemType <= (int)SkillGemCategory.elementGem ){
+                text = "Element";
+            } else if ( (int)gemType <= (int)SkillGemCategory.damageEffect ){
+                text = "Damage";
+            } else if ( (int)gemType <= (int)SkillGemCategory.healEffect ){
+                text = "Heal";
+            } else if ( (int)gemType <= (int)SkillGemCategory.buffEffect ){
+                text = "Buff";
+            } else if ( (int)gemType <= (int)SkillGemCategory.statusEffect ){
+                text = "Status";
+            }
+            amount.text = text;
 
             // Add listener when selecting this skillGem
             Button button = o.GetComponent<Button>();

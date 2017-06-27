@@ -40,7 +40,7 @@ public class SkillsUI : MonoBehaviour {
             o.transform.SetParent(content);
             o.transform.localScale = Vector3.one;
 
-            o.transform.localPosition = new Vector3(skillItemWidth/2.00f, - i*skillItemHeight - skillItemHeight*0.75f, 0);
+            o.transform.localPosition = new Vector3(skillItemWidth/2.00f, - i*skillItemHeight - skillItemHeight*0.75f, -1f);
 
             o.transform.Find("Name").GetComponent<Text>().text = player.character.skills[i].name;
             o.transform.Find("Icon").GetComponent<Image>().sprite = player.character.skills[i].icon;
