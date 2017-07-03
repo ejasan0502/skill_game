@@ -328,8 +328,10 @@ public class SkillCreate : MonoBehaviour {
         }
         
         skillGems = new List<SkillGem>();
-        gems = Player.instance.inventory.items.Where<Inventory.InventoryItem>( (ii) => ii.item.itemType == ItemType.skillGem).ToList();
-        
+
+        IEnumerable<Inventory.InventoryItem> gemItems = Player.instance.inventory.items.Where<Inventory.InventoryItem>( (ii) => ii.item.itemType == ItemType.skillGem);
+        if ( gemItems == null ) return;
+        gems = gemItems.ToList();
 
         // Create UI object of each skillGem in list
         float height = ((RectTransform)inventoryItem.transform).rect.height;
